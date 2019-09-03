@@ -1,4 +1,4 @@
-
+from luffy_permission import settings
 
 def init_permissions(curent_user,request):
     """
@@ -26,4 +26,4 @@ def init_permissions(curent_user,request):
 
     # print(permission_list)
 
-    request.session['luffy_permission_list_url_list'] = permission_list
+    request.session[settings.PERMISSION_SISSION_KEY] = permission_list

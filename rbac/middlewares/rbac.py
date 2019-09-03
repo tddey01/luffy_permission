@@ -5,7 +5,7 @@ import  re
 
 
 
-class RbacMiddlewarMinxin(MiddlewareMixin):
+class RbacMiddleware(MiddlewareMixin):
     """
     用户权限申请拦截 校验
     """
@@ -23,14 +23,15 @@ class RbacMiddlewarMinxin(MiddlewareMixin):
         """
         # http://127.0.0.1:8000/customer/list/   --->> /customer/list/
         # http://127.0.0.1:8000/customer/list/?age=18   --->> /customer/list/
-        valid_url_list = [
-            '/login/',
-            '/admin/.*',
-        ]
+        # valid_url_list = [   #白名单功能
+        #     '/login/',
+        #     '/admin/.*',
+        # ]
+
 
         currnt_url = request.path_info
 
-        for valid_id in valid_url_list:
+        for valid_id in settings.VALID_URL_LIST:
             if  re.match(valid_id,currnt_url):
             # if valid_id == currnt_url:
             #     pass  # 白名单中的URL无需验证即可访问

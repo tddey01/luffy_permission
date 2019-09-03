@@ -47,7 +47,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'web.md.xxx.ChecKPermissions',
+    'rbac.middlewares.rbac.RbacMiddleware',
 ]
 
 ROOT_URLCONF = 'luffy_permission.urls'
@@ -117,6 +117,24 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django.db.backends': {
+            'handlers': ['console'],
+            'propagate': True,
+            'level': 'DEBUG',
+        },
+    },
+}
+
 # ################## 默认文件上传配置 ########################
 from django.core.files.uploadhandler import MemoryFileUploadHandler
 from django.core.files.uploadhandler import TemporaryFileUploadHandler
@@ -161,3 +179,12 @@ FILE_UPLOAD_PERMISSIONS = None
 # see https://docs.python.org/3/library/os.html#files-and-directories.
 # 文件夹权限
 FILE_UPLOAD_DIRECTORY_PERMISSIONS = None
+
+
+# 权限相关的问题
+PERMISSION_SISSION_KEY = 'luffy_permission_list_url_key'
+
+VALID_URL_LIST = [
+    '/login/',
+    '/admin/.*',
+]

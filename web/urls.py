@@ -1,7 +1,6 @@
 from django.conf.urls import url
 from web.views import customer
 from web.views import payment
-
 from web.views import account
 
 
