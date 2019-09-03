@@ -34,3 +34,46 @@ class UserInfo(models.Model):
 
     def __str__(self):
         return self.name
+
+
+'''
+    current_user = models.UserInfo.objects.filter(name=user, password=pwd).first()
+    获取当前用户所拥有的所有角色 select id,name xx from xb
+    role_list = current_user.roles.all().values(permissions__id,permissions__url).destinct
+    去重
+    
+有DBUG 问题
+    1 一个用户是否可以拥有多个角色？  是
+    2 一个角色是否可以拥有多个权限  是 
+    
+CEO  
+ /index/.
+ /order/
+总监
+    /index/
+    /customer/
+销售
+    /index/
+    /add_user/
+金牌讲师
+
+问题二
+权限表
+ 角色
+    CEO  
+     总监
+     销售
+     金牌讲师
+     
+角色 和权限 关系表
+    CEO    /index/
+    总监    /order/
+用户和角色关系
+    1 1
+    1 1
+    1 1
+用户表
+    wupaiqi   1
+     
+
+'''
