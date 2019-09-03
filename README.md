@@ -12,7 +12,7 @@
 
 步骤
 
-	###### 1 ：创建django project luffy_permission
+#####  1 ：创建django project luffy_permission
 
 ##### 2 ： 两个app
 
