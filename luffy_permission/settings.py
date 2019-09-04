@@ -188,3 +188,5 @@ VALID_URL_LIST = [
     '/login/',
     '/admin/.*',
 ]
+
+MENU_SISSION_KEY = 'luffy_permission_menu_key'
