@@ -7,7 +7,7 @@ from rbac.services.init_permission import  init_permissions
 
 
 def login(request):
-    print(request.POST)
+    # print(request.POST)
     # 1 用户登录
     if request.method == "GET":
         return render(request, 'login.html')

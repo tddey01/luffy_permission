@@ -13,9 +13,11 @@ def init_permissions(curent_user, request):
     # 当前用户所有权限
     permission_queryest = curent_user.roles.filter(permissions__isnull=False).values('permissions__id',
                                                                                      'permissions__title',
-                                                                                     'permissions__is_menu',
-                                                                                     'permissions__icon',
-                                                                                     'permissions__url').distinct()
+                                                                                     'permissions__url',
+                                                                                     'permissions__menu_id',
+                                                                                     'permissions__menu__title',
+                                                                                     'permissions__menu__icon',
+                                                                                     ).distinct()
     # permission_list = curent_user.roles.all().values('permissions__id', 'permissions__url').distinct()
     # print(permission_list)
 
@@ -27,23 +29,31 @@ def init_permissions(curent_user, request):
     #     # print(item)
     #     print(permissions_list)
     # print('______')
+
     # 3  获取权限 菜单信息
-    meun_list = []
     permission_list = []
+
+    menu_dict = {}
+
     for item in permission_queryest:
         permission_list.append(item['permissions__url'])
-        if item['permissions__is_menu']:
-            temp = {
-                'title': item['permissions__title'],
-                'icon': item['permissions__icon'],
-                'url': item['permissions__url'],
+        menu_id = item['permissions__menu_id']
+        if not menu_id:
+            continue
+        node = {'title': item['permissions__title'], 'url': item['permissions__url']}
+        if menu_id in menu_dict:
+            menu_dict(menu_id)['children'].append(node)
+        else:
+            menu_dict[menu_id] = {
+                'title': item['permissions__menu__title'],
+                'icon': item['permissions__menu__icon'],
+                'children': [node, ]
             }
-            meun_list.append(temp)
 
-    # permission_list = [item['permissions__url'] for item in permission_queryest]     
+    # permission_list = [item['permissions__url'] for item in permission_queryest]
 
-    print(meun_list)
-    print(permission_list)
+    # print(permission_list)
+    print(menu_dict)
 
     request.session[settings.PERMISSION_SISSION_KEY] = permission_list
-    request.session[settings.MENU_SISSION_KEY] = meun_list
+    request.session[settings.MENU_SISSION_KEY] = menu_dict
