@@ -42,7 +42,7 @@ def init_permissions(curent_user, request):
             continue
         node = {'title': item['permissions__title'], 'url': item['permissions__url']}
         if menu_id in menu_dict:
-            menu_dict(menu_id)['children'].append(node)
+            menu_dict[menu_id]['children'].append(node)
         else:
             menu_dict[menu_id] = {
                 'title': item['permissions__menu__title'],
