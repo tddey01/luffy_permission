@@ -1,4 +1,4 @@
-from django.shortcuts import HttpResponse,redirect,render
+from django.shortcuts import HttpResponse
 from django.utils.deprecation import MiddlewareMixin
 from django.conf import settings
 import  re
