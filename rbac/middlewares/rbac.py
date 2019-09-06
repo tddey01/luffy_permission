@@ -1,8 +1,7 @@
 from django.shortcuts import HttpResponse
 from django.utils.deprecation import MiddlewareMixin
 from django.conf import settings
-import  re
-
+import re
 
 
 class RbacMiddleware(MiddlewareMixin):
@@ -28,32 +27,31 @@ class RbacMiddleware(MiddlewareMixin):
         #     '/admin/.*',
         # ]
 
-
         currnt_url = request.path_info
 
         for valid_id in settings.VALID_URL_LIST:
-            if  re.match(valid_id,currnt_url):
-            # if valid_id == currnt_url:
-            #     pass  # 白名单中的URL无需验证即可访问
+            if re.match(valid_id, currnt_url):
+                # if valid_id == currnt_url:
+                #     pass  # 白名单中的URL无需验证即可访问
 
-                return  None
+                return None
 
-        permission_url_list = request.session.get(settings.PERMISSION_SISSION_KEY)
+        permission_list = request.session.get(settings.PERMISSION_SISSION_KEY)
 
-        # if not  permission_url_list:
-        #     return HttpResponse("未获取到用户权限信息")
+        if not  permission_list:
+            return HttpResponse("未获取到用户权限信息")
+
         flag = False
-        print(currnt_url,permission_url_list)
+        print(currnt_url, permission_list)
 
+        for item in permission_list:
 
-
-        for  url in permission_url_list:
-            reg = "^%s$" %url
-            if re.match(reg,currnt_url):
+            reg = "^%s$" % item['url']
+            print(reg)
+            if re.match(reg, currnt_url):
                 flag = True
+                request.current_selected_permission = item['pid'] or item['id']
                 break
 
-        if  not flag:
-            return  HttpResponse('无权访问')
-
-
+        if not flag:
+            return HttpResponse('无权访问')
