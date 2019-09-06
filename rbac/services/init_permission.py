@@ -15,6 +15,8 @@ def init_permissions(curent_user, request):
                                                                                      'permissions__title',
                                                                                      'permissions__url',
                                                                                      'permissions__pid_id',
+                                                                                     'permissions__pid__title',
+                                                                                     'permissions__pid__url',
                                                                                      'permissions__menu_id',
                                                                                      'permissions__menu__title',
                                                                                      'permissions__menu__icon',
@@ -37,14 +39,20 @@ def init_permissions(curent_user, request):
     menu_dict = {}
 
     for item in permission_queryest:
-        permission_list.append(
-            {'id': item['permissions__id'], 'url': item['permissions__url'], 'pid': item['permissions__pid_id']})
+        permission_list.append({
+            'id': item['permissions__id'],
+            'url': item['permissions__url'],
+            'title': item['permissions__title'],
+            'pid': item['permissions__pid_id'],
+            'p_title': item['permissions__pid__title'],
+            'p_url': item['permissions__pid__url'],
+        })
 
         # permission_list.append(item['permissions__url'])
         menu_id = item['permissions__menu_id']
         if not menu_id:
             continue
-        node = {'id':item['permissions__id'],'title': item['permissions__title'], 'url': item['permissions__url']}
+        node = {'id': item['permissions__id'], 'title': item['permissions__title'], 'url': item['permissions__url']}
         if menu_id in menu_dict:
             menu_dict[menu_id]['children'].append(node)
         else:
@@ -57,7 +65,7 @@ def init_permissions(curent_user, request):
     # permission_list = [item['permissions__url'] for item in permission_queryest]
 
     # print(permission_list)
-    print(menu_dict)
+    # print(menu_dict)
 
     request.session[settings.PERMISSION_SISSION_KEY] = permission_list
     request.session[settings.MENU_SISSION_KEY] = menu_dict

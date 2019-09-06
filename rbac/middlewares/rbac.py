@@ -38,11 +38,14 @@ class RbacMiddleware(MiddlewareMixin):
 
         permission_list = request.session.get(settings.PERMISSION_SISSION_KEY)
 
-        if not  permission_list:
+        if not permission_list:
             return HttpResponse("未获取到用户权限信息")
+        url_record = [
+            {'title': '首页', 'url': '#'}
+        ]
 
         flag = False
-        print(currnt_url, permission_list)
+        # print(currnt_url, permission_list)
 
         for item in permission_list:
 
@@ -51,6 +54,15 @@ class RbacMiddleware(MiddlewareMixin):
             if re.match(reg, currnt_url):
                 flag = True
                 request.current_selected_permission = item['pid'] or item['id']
+                if not item['pid']:
+                    url_record.extend([{'title': item['title'], 'url': item['url'],'class': 'active' }])
+                else:
+                    url_record.extend([
+                        {'title': item['p_title'], 'url': item['p_url'], },
+                        {'title': item['title'], 'url': item['url'],'class': 'active' },
+                    ])
+                request.breadcrumb = url_record
+                print(request.breadcrumb)
                 break
 
         if not flag:
