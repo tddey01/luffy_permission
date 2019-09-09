@@ -14,6 +14,7 @@ def init_permissions(curent_user, request):
     permission_queryest = curent_user.roles.filter(permissions__isnull=False).values('permissions__id',
                                                                                      'permissions__title',
                                                                                      'permissions__url',
+                                                                                     'permissions__name',
                                                                                      'permissions__pid_id',
                                                                                      'permissions__pid__title',
                                                                                      'permissions__pid__url',
@@ -34,19 +35,28 @@ def init_permissions(curent_user, request):
     # print('______')
 
     # 3  获取权限 菜单信息
-    permission_list = []
+    # permission_list = []
+    permission_dict = {}
 
     menu_dict = {}
 
     for item in permission_queryest:
-        permission_list.append({
+        # permission_list.append({
+        #     'id': item['permissions__id'],
+        #     'url': item['permissions__url'],
+        #     'title': item['permissions__title'],
+        #     'pid': item['permissions__pid_id'],
+        #     'p_title': item['permissions__pid__title'],
+        #     'p_url': item['permissions__pid__url'],
+        # })
+        permission_dict[item['permissions__name']] = {
             'id': item['permissions__id'],
             'url': item['permissions__url'],
             'title': item['permissions__title'],
             'pid': item['permissions__pid_id'],
             'p_title': item['permissions__pid__title'],
             'p_url': item['permissions__pid__url'],
-        })
+        }
 
         # permission_list.append(item['permissions__url'])
         menu_id = item['permissions__menu_id']
@@ -67,5 +77,5 @@ def init_permissions(curent_user, request):
     # print(permission_list)
     # print(menu_dict)
 
-    request.session[settings.PERMISSION_SISSION_KEY] = permission_list
+    request.session[settings.PERMISSION_SISSION_KEY] = permission_dict
     request.session[settings.MENU_SISSION_KEY] = menu_dict
