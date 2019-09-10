@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'^user/list/$',user.user_list,name='user_list'),  # rbac:user_list
     url(r'^user/add/$', user.user_add,name='user_add'), # rbac:user_add
     url(r'^user/del/(?P<pk>\d+)/$', user.user_del, name='user_del'),  # rbac:user_del
+    url(r'^user/reset/password/(?P<pk>\d+)/$', user.user_reset_password, name='user_reset_password'),  # rbac:user_password  重置密码
     url(r'^user/edit/(?P<pk>\d+)/$', user.user_edit, name='user_edit'),  # rbac:user_edit
 
 

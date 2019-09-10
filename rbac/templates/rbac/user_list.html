@@ -14,7 +14,7 @@
                 <th>用户名</th>
                 <th>邮箱</th>
                 <th>重置密码</th>
-                <th>选项</th>
+                <th>操作</th>
             </tr>
             </thead>
             <tbody>
@@ -22,11 +22,17 @@
                 <tr>
                     <td>{{ row.id }}</td>
                     <td>{{ row.name }}</td>
-                     <td>{{ row.email }}</td>
-                     <td>{{ row.password}}</td>
+                    <td>{{ row.email }}</td>
                     <td>
-                        <a style="color: #333333;" href="{% url 'rbac:user_edit' pk=row.id %}"> <i class="fa fa-edit" aria-hidden="true"></i></a>
-                        <a style="color: #d9534f;" href="{% url 'rbac:user_del' pk=row.id %}"><i class="fa fa-trash-o"></i></a>
+                        <a href="{% url 'rbac:user_reset_password' pk=row.id %}">
+                            重置密码
+                        </a>
+                    </td>
+                    <td>
+                        <a style="color: #333333;" href="{% url 'rbac:user_edit' pk=row.id %}"> <i
+                                class="fa fa-edit"  aria-hidden="true"></i></a>
+                        <a style="color: #d9534f;" href="{% url 'rbac:user_del' pk=row.id %}"><i
+                                class="fa fa-trash-o"></i></a>
                     </td>
                 </tr>
             {% endfor %}
