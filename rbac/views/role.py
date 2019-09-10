@@ -9,9 +9,6 @@ from rbac import models
 from rbac.forms.Role import RoleModelForm
 
 
-
-
-
 def role_list(request):
     '''
     角色列表
