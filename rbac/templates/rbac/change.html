@@ -1,4 +1,5 @@
 {% extends 'layout.html' %}
+
 {% block css %}
     <style>
         ul {
@@ -18,14 +19,15 @@
             margin-left: 5px;
             color: #6d6565;
         }
-
     </style>
 {% endblock %}
+
 
 {% block content %}
     <div class="luffy-container">
         <form class="form-horizontal" method="post" novalidate>
             {% csrf_token %}
+
             {% for field in form %}
                 <div class="form-group">
                     <label class="col-sm-2 control-label">{{ field.label }}</label>
