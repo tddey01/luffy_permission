@@ -1,7 +1,15 @@
+#!/usr/bin/env  python3
+# -*- coding: UTF-8 -*-
+
+
+import re
 from django.template import Library
 from django.conf import settings
 from collections import OrderedDict
-import re
+# from django.urls import reverse
+# from django.http import QueryDict
+from rbac.services import Menu_urls
+
 register = Library()
 
 
@@ -12,7 +20,8 @@ def static_menu(request):
     :return:
     '''
     menu_list = request.session[settings.MENU_SISSION_KEY]
-    return {"menu_list":menu_list}
+    return {"menu_list": menu_list}
+
 
 @register.inclusion_tag('rbac/multi_menu.html')
 def multi_menu(request):
@@ -43,14 +52,16 @@ def multi_menu(request):
                 val['class'] = ''
         ordered_dict[key] = val
 
-    return {"menu_dict":ordered_dict}
+    return {"menu_dict": ordered_dict}
+
 
 @register.inclusion_tag('rbac/breadcrumb.html')
 def breadcrumb(request):
-    return {'record_list':request.breadcrumb}
+    return {'record_list': request.breadcrumb}
+
 
 @register.filter
-def has_permission(request,name):
+def has_permission(request, name):
     """
     判断是否有权限
     :param request:
@@ -59,3 +70,25 @@ def has_permission(request,name):
     """
     if name in request.session[settings.PERMISSION_SISSION_KEY]:
         return True
+
+
+@register.simple_tag
+def memory_cul(request, name, *args, **kwargs):
+    '''
+    生成带有搜索条件的URL(替代了模板中的URL)
+    :param request:
+    :param name:
+    :return:
+    '''
+    # basic_url = reverse(name, args=args, kwargs=kwargs)
+    #
+    # # 当前URL中无参数
+    # if not request.GET:
+    #     return basic_url
+    #
+    # query_dict = QueryDict(mutable=True)
+    # query_dict['_filter'] = request.GET.urlencode()
+    # # query_dict.urlencode() # filter=mid=26&age=99
+    #
+    # return "%s?%s" % (basic_url, query_dict.urlencode())
+    return Menu_urls.memory_cul(request, name, *args, **kwargs)

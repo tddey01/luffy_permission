@@ -29,9 +29,11 @@
                         </a>
                     </td>
                     <td>
-                        <a style="color: #333333;" href="{% url 'rbac:user_edit' pk=row.id %}"> <i
-                                class="fa fa-edit"  aria-hidden="true"></i></a>
-                        <a style="color: #d9534f;" href="{% url 'rbac:user_del' pk=row.id %}"><i
+                        <a style="color: #333333;" href="{% memory_url request 'rbac:menu_edit' pk=row.id %}">
+                            <i class="fa fa-edit" aria-hidden="true"></i></a>
+
+
+                        <a style="color: #d9534f;" href="{% memory_url request 'rbac:menu_del' pk=row.id %}"><i
                                 class="fa fa-trash-o"></i></a>
                     </td>
                 </tr>
