@@ -2,19 +2,19 @@
 
 {% block css %}
     <style>
-        ul {
+        .us ul {
             list-style-type: none;
             padding: 0;
         }
 
-        ul li {
+        .us .ul .li {
             float: left;
             padding: 10px;
             padding-left: 0;
             width: 80px;
         }
 
-        ul li i {
+        .us ul li i {
             font-size: 18px;
             margin-left: 5px;
             color: #6d6565;
@@ -31,7 +31,7 @@
             {% for field in form %}
                 <div class="form-group">
                     <label class="col-sm-2 control-label">{{ field.label }}</label>
-                    <div class="col-sm-8">
+                    <div class="col-sm-8 us">
                         {{ field }}
                         <span style="color: red;">{{ field.errors.0 }}</span>
                     </div>

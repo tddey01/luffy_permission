@@ -8,7 +8,6 @@ from rbac import models
 
 
 def menu_list(request):
-
     '''
     菜单和权限列表
     :param request:
@@ -18,14 +17,25 @@ def menu_list(request):
     menus = models.Menu.objects.all()
 
     menu_id = request.GET.get('mid')  # 用户选择的一级菜单
+    menu_exists= models.Menu.objects.filter(id=menu_id).exists()  #查看标的id
+    if not menu_exists:
+        menu_id = None
 
+    if menu_id:
+        second_menu = models.Permission.objects.filter(menu_id=menu_id)
+    else:
+        second_menu = []
     return render(
         request, 'rbac/menu_list.html',
-        {'menus': menus, 'menu_id': menu_id})
+        {
+            'menus': menus,
+            'second_menu': second_menu,
+            'menu_id': menu_id,
+
+        })
 
 
 def menu_add(request):
-
     """
     添加一级菜单
     :param request:
@@ -50,7 +60,6 @@ def menu_add(request):
 
 
 def menu_edit(request, pk):
-
     '''
     修改编辑菜单
     :param request:
@@ -79,7 +88,6 @@ def menu_edit(request, pk):
 
 
 def menu_del(request, pk):
-
     '''
     删除菜单
     :param request:
