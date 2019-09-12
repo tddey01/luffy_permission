@@ -76,7 +76,7 @@
                     <i class="fa fa-book" aria-hidden="true"></i> 二级菜单
 
                     {% if menu_id %}
-                        <a href="{#  #}" class="right btn btn-success btn-xs"
+                        <a href="{% memory_cul  request 'rbac:second_menu_add' menu_id=menu_id %}" class="right btn btn-success btn-xs"
                            style="padding: 2px 8px;margin: -3px;">
                             <i class="fa fa-gavel" aria-hidden="true"></i> 新建
                         </a>
@@ -94,17 +94,16 @@
                     </thead>
                     <tbody>
                     {% for row in second_menu %}
-                        <tr>
-                            <td rowspan="2"><a>{{ row.title }}</a></td>
+                        <tr class="{% if row.id|safe == second_menu_id %} active{% endif %}">
+                            <td rowspan="2"><a href="?mid={{ menu_id }}&sid={{ row.id }}">{{ row.title }}</a></td>
                             <td >{{ row.name }}</td>
 
                             <td>
-                                <a style="color: #333333;" href="#"><i class="fa fa-edit" aria-hidden="true"></i></a>
-                                <a style="color: #d9534f;" href="#"><i class="fa fa-trash-o"></i></a>
+                                <a style="color: #333333;" href="{% memory_cul  request 'rbac:second_menu_edit' pk=row.id %}"><i class="fa fa-edit" aria-hidden="true"></i></a>
+                                <a style="color: #d9534f;" href="{% memory_cul  request 'rbac:second_menu_del' pk=row.id %}"><i class="fa fa-trash-o"></i></a>
                             </td>
                         </tr>
-                        <tr>
-
+                        <tr class="{% if row.id|safe == second_menu_id %} active{% endif %}">
                             <td colspan="2" style="border-top: 0">{{ row.url }}</td>
                         </tr>
                     {% endfor %}
