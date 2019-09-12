@@ -73,12 +73,13 @@
 
                 <div class="panel-heading">
 
-                    <i class="fa fa-book" aria-hidden="true"></i> 二级菜单
+                    <i class="fa fa-gavel" aria-hidden="true"></i> 二级菜单
 
                     {% if menu_id %}
-                        <a href="{% memory_cul  request 'rbac:second_menu_add' menu_id=menu_id %}" class="right btn btn-success btn-xs"
+                        <a href="{% memory_cul request 'rbac:second_menu_add' menu_id=menu_id %}"
+                           class="right btn btn-success btn-xs"
                            style="padding: 2px 8px;margin: -3px;">
-                            <i class="fa fa-gavel" aria-hidden="true"></i> 新建
+                            <i class="fa fa-plus-circle" aria-hidden="true"></i> 新建
                         </a>
                     {% endif %}
 
@@ -96,14 +97,65 @@
                     {% for row in second_menu %}
                         <tr class="{% if row.id|safe == second_menu_id %} active{% endif %}">
                             <td rowspan="2"><a href="?mid={{ menu_id }}&sid={{ row.id }}">{{ row.title }}</a></td>
-                            <td >{{ row.name }}</td>
+                            <td>{{ row.name }}</td>
 
                             <td>
-                                <a style="color: #333333;" href="{% memory_cul  request 'rbac:second_menu_edit' pk=row.id %}"><i class="fa fa-edit" aria-hidden="true"></i></a>
-                                <a style="color: #d9534f;" href="{% memory_cul  request 'rbac:second_menu_del' pk=row.id %}"><i class="fa fa-trash-o"></i></a>
+                                <a style="color: #333333;"
+                                   href="{% memory_cul request 'rbac:second_menu_edit' pk=row.id %}"><i
+                                        class="fa fa-edit" aria-hidden="true"></i></a>
+                                <a style="color: #d9534f;"
+                                   href="{% memory_cul request 'rbac:second_menu_del' pk=row.id %}"><i
+                                        class="fa fa-trash-o"></i></a>
                             </td>
                         </tr>
                         <tr class="{% if row.id|safe == second_menu_id %} active{% endif %}">
+                            <td colspan="2" style="border-top: 0">{{ row.url }}</td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+            </div>
+
+        </div>
+        <div class="col-md-5">
+            <div class="panel panel-default">
+
+                <div class="panel-heading">
+
+                    <i class="fa fa-gavel" aria-hidden="true"></i> 权限
+
+                    {% if second_menu_id %}
+                        <a href="{% memory_cul request 'rbac:permission_add' second_menu_id=second_menu_id %}"
+                           class="right btn btn-success btn-xs"
+                           style="padding: 2px 8px;margin: -3px;">
+                            <i class="fa fa-plus-circle" aria-hidden="true"></i> 新建
+                        </a>
+                    {% endif %}
+
+                </div>
+                <!-- Table -->
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>COOE&URL</th>
+                        <th>选项</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for row in permission %}
+                        <tr>
+                            <td rowspan="2">{{ row.title }}</td>
+                            <td>{{ row.name }}</td>
+
+                            <td>
+                                <a style="color: #333333;" href="#"><i class="fa fa-edit" aria-hidden="true"></i></a>
+                                <a style="color: #d9534f;" href="#"><i class="fa fa-trash-o"></i></a>
+                            </td>
+                        </tr>
+                        <tr class="#">
                             <td colspan="2" style="border-top: 0">{{ row.url }}</td>
                         </tr>
                     {% endfor %}

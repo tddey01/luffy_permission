@@ -4,6 +4,7 @@ from django.shortcuts import HttpResponse, redirect, render
 # from django.urls import reverse
 from rbac.forms.Menu import MenuModelForms
 from rbac.forms.Menu import SecondMenuModelForms
+from rbac.forms.Menu import PermissionModelForms
 from rbac.services.Menu_urls import memory_resverse
 from rbac import models
 
@@ -28,6 +29,16 @@ def menu_list(request):
         second_menu = models.Permission.objects.filter(menu_id=menu_id)
     else:
         second_menu = []
+
+    second_menu_exists= models.Permission.objects.filter(id=second_menu_id).exists()  #查看标的id
+    if not second_menu_exists:
+        second_menu_id = None
+
+    if second_menu_id:
+        permission = models.Permission.objects.filter(pid_id=second_menu_id)
+    else:
+        permission = []
+
     return render(
         request, 'rbac/menu_list.html',
         {
@@ -35,6 +46,7 @@ def menu_list(request):
             'second_menu': second_menu,
             'menu_id': menu_id,
             'second_menu_id':second_menu_id,
+            'permission':permission,
 
         })
 
@@ -124,7 +136,7 @@ def second_menu_add(request,menu_id):
 
 
     if request.method == 'GET':
-        form = SecondMenuModelForms(initial={'menu':menu_object})
+        form = SecondMenuModelForms()
         return render(request, 'rbac/change.html', {'form': form})
 
     form = SecondMenuModelForms(data=request.POST)
@@ -168,3 +180,31 @@ def second_menu_del(request,pk ):
         return render(request, 'rbac/delete.html', {'cancel_url': url})
     models.Permission.objects.filter(id=pk).delete()
     return redirect(url)
+
+
+def permission_add(request,second_menu_id):
+    '''
+    新建菜单权限
+    :param request:
+    :return:
+    '''
+
+    menu_object = models.Menu.objects.filter(id=second_menu_id).first()  # 取到menu_id对象
+
+    if request.method == 'GET':
+        form = PermissionModelForms(initial={'menu': menu_object})
+        return render(request, 'rbac/change.html', {'form': form})
+
+    form = PermissionModelForms(data=request.POST)
+    if form.is_valid():
+        form.save()
+
+        return redirect(memory_resverse(request, 'rbac:menu_list'))
+
+    return render(request, 'rbac/change.html', {'form': form})
+
+def permission_edit(request,pk):
+    pass
+
+def permission_del(request,pk):
+    pass

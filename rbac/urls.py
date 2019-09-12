@@ -27,8 +27,14 @@ urlpatterns = [
 
 
     #二级菜单
-    url(r'^second/menu/add/(?P<menu_id>\d+)$', menu.second_menu_add, name='second_menu_add'),  # rbac:second_menu_add
+    url(r'^second/menu/add/(?P<menu_id>\d+)/$', menu.second_menu_add, name='second_menu_add'),  # rbac:second_menu_add
     url(r'^second/menu/edit/(?P<pk>\d+)/$', menu.second_menu_edit, name='second_menu_edit'),  # rbac:second_menu_edit
     url(r'^second/menu/del/(?P<pk>\d+)/$', menu.second_menu_del, name='second_menu_del'),  # rbac:second_menu_del
+
+    #权限菜单
+    url(r'^permission/add/(?P<second_menu_id>\d+)/$', menu.permission_add, name='permission_add'),  # rbac:v_add
+    url(r'^permission/edit/(?P<pk>\d+)/$', menu.permission_edit, name='permission_edit'),  # rbac:permission_edit
+    url(r'^permission/del/(?P<pk>\d+)/$', menu.permission_del, name='permission_del'),  # rbac:permission_del
+
 
 ]
