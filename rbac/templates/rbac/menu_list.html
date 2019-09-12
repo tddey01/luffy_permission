@@ -119,7 +119,7 @@
             </div>
 
         </div>
-        <div class="col-md-5">
+        <div class="col-md-4">
             <div class="panel panel-default">
 
                 <div class="panel-heading">
@@ -151,11 +151,11 @@
                             <td>{{ row.name }}</td>
 
                             <td>
-                                <a style="color: #333333;" href="#"><i class="fa fa-edit" aria-hidden="true"></i></a>
-                                <a style="color: #d9534f;" href="#"><i class="fa fa-trash-o"></i></a>
+                                <a style="color: #333333;" href="{% memory_cul request 'rbac:permission_edit' pk=row.id %}"><i class="fa fa-edit" aria-hidden="true"></i></a>
+                                <a style="color: #d9534f;" href="{% memory_cul request 'rbac:permission_del' pk=row.id %}"><i class="fa fa-trash-o"></i></a>
                             </td>
                         </tr>
-                        <tr class="#">
+                        <tr>
                             <td colspan="2" style="border-top: 0">{{ row.url }}</td>
                         </tr>
                     {% endfor %}

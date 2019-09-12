@@ -21,7 +21,7 @@ def menu_list(request):
     menu_id = request.GET.get('mid')  # 用户选择的一级菜单
     second_menu_id = request.GET.get('sid')  # 用户选择的二级菜单
 
-    menu_exists= models.Menu.objects.filter(id=menu_id).exists()  #查看标的id
+    menu_exists = models.Menu.objects.filter(id=menu_id).exists()  # 查看标的id
     if not menu_exists:
         menu_id = None
 
@@ -30,7 +30,7 @@ def menu_list(request):
     else:
         second_menu = []
 
-    second_menu_exists= models.Permission.objects.filter(id=second_menu_id).exists()  #查看标的id
+    second_menu_exists = models.Permission.objects.filter(id=second_menu_id).exists()  # 查看标的id
     if not second_menu_exists:
         second_menu_id = None
 
@@ -44,10 +44,9 @@ def menu_list(request):
         {
             'menus': menus,
             'second_menu': second_menu,
+            'permission': permission,
             'menu_id': menu_id,
-            'second_menu_id':second_menu_id,
-            'permission':permission,
-
+            'second_menu_id': second_menu_id,
         })
 
 
@@ -91,6 +90,7 @@ def menu_edit(request, pk):
     if request.method == 'GET':
         form = MenuModelForms(instance=obj)
         return render(request, 'rbac/change.html', {'form': form})
+
     form = MenuModelForms(instance=obj, data=request.POST)
     if form.is_valid():
         form.save()
@@ -100,6 +100,7 @@ def menu_edit(request, pk):
         #     url = "%s?%s" %(url,origin_params)
         # return redirect(url)
         return redirect(memory_resverse(request, 'rbac:menu_list'))
+
     return render(request, 'rbac/change.html', {'form': form})
 
 
@@ -123,8 +124,7 @@ def menu_del(request, pk):
     return redirect(url)
 
 
-def second_menu_add(request,menu_id):
-
+def second_menu_add(request, menu_id):
     """
     添加二级菜单
     :param request:
@@ -132,11 +132,10 @@ def second_menu_add(request,menu_id):
     :return:
     """
 
-    menu_object = models.Menu.objects.filter(id=menu_id).first()  #取到menu_id对象
-
+    menu_object = models.Menu.objects.filter(id=menu_id).first()  # 取到menu_id对象
 
     if request.method == 'GET':
-        form = SecondMenuModelForms()
+        form = SecondMenuModelForms(initial={'menu': menu_object})
         return render(request, 'rbac/change.html', {'form': form})
 
     form = SecondMenuModelForms(data=request.POST)
@@ -148,9 +147,7 @@ def second_menu_add(request,menu_id):
     return render(request, 'rbac/change.html', {'form': form})
 
 
-
-def second_menu_edit(request,pk ):
-
+def second_menu_edit(request, pk):
     '''
     编辑二级菜单
     :param request:
@@ -162,13 +159,16 @@ def second_menu_edit(request,pk ):
     if request.method == 'GET':
         form = SecondMenuModelForms(instance=Permission_object)
         return render(request, 'rbac/change.html', {'form': form})
-    form = SecondMenuModelForms(data=request.POST,instance=Permission_object)
+
+    form = SecondMenuModelForms(data=request.POST, instance=Permission_object)
     if form.is_valid():
         form.save()
         return redirect(memory_resverse(request, 'rbac:menu_list'))
+
     return render(request, 'rbac/change.html', {'form': form})
 
-def second_menu_del(request,pk ):
+
+def second_menu_del(request, pk):
     '''
     删除二级菜单
     :param request:
@@ -178,33 +178,75 @@ def second_menu_del(request,pk ):
     url = memory_resverse(request, 'rbac:menu_list')
     if request.method == 'GET':
         return render(request, 'rbac/delete.html', {'cancel_url': url})
+
     models.Permission.objects.filter(id=pk).delete()
     return redirect(url)
 
 
-def permission_add(request,second_menu_id):
+def permission_add(request, second_menu_id):
     '''
-    新建菜单权限
+    添加权限菜单
     :param request:
     :return:
     '''
 
-    menu_object = models.Menu.objects.filter(id=second_menu_id).first()  # 取到menu_id对象
-
     if request.method == 'GET':
-        form = PermissionModelForms(initial={'menu': menu_object})
+        form = PermissionModelForms()
         return render(request, 'rbac/change.html', {'form': form})
 
     form = PermissionModelForms(data=request.POST)
     if form.is_valid():
-        form.save()
+        second_menu_object = models.Permission.objects.filter(id=second_menu_id).first()  # 取到menu_id对象
 
+        if not second_menu_object:
+            return HttpResponse('二级菜单不存在，请重新选择')
+        # form instance 中包含用户提交的所有数据
+
+        form.instance.pid = second_menu_object
+
+        # instance = models.Permission(title='',name='',url='',pid=second_menu_object)
+        # instance.pid = second_menu_object
+        # instance.save()
+
+        form.save()
         return redirect(memory_resverse(request, 'rbac:menu_list'))
 
     return render(request, 'rbac/change.html', {'form': form})
 
-def permission_edit(request,pk):
-    pass
 
-def permission_del(request,pk):
-    pass
+def permission_edit(request, pk):
+    '''
+     编辑权限
+    :param request:
+    :param pk:当前要编辑的权限ID
+    :return:
+    '''
+    permission_object = models.Permission.objects.filter(id=pk).first()
+
+    if request.method == 'GET':
+        form = PermissionModelForms(instance=permission_object)
+        return render(request, 'rbac/change.html', {'form': form})
+
+    form = PermissionModelForms(data=request.POST, instance=permission_object)
+    if form.is_valid():
+        form.save()
+        return redirect(memory_resverse(request, 'rbac:menu_list'))
+
+    return render(request, 'rbac/change.html', {'form': form})
+
+
+
+def permission_del(request, pk):
+   '''
+    删除权限
+   :param request:
+   :param pk:
+   :return:
+   '''
+
+   url = memory_resverse(request, 'rbac:menu_list')
+   if request.method == 'GET':
+       return render(request, 'rbac/delete.html', {'cancel_url': url})
+
+   models.Permission.objects.filter(id=pk).delete()
+   return redirect(url)
