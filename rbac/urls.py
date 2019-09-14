@@ -36,5 +36,10 @@ urlpatterns = [
     url(r'^permission/edit/(?P<pk>\d+)/$', menu.permission_edit, name='permission_edit'),  # rbac:permission_edit
     url(r'^permission/del/(?P<pk>\d+)/$', menu.permission_del, name='permission_del'),  # rbac:permission_del
 
+    #
+    url(r'^multi/permission/$', menu.multi_permission, name='multi_permission'),  # rbac:v_add
+
+
+
 
 ]

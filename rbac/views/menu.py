@@ -1,12 +1,19 @@
 #!/usr/bin/env  python3
 # -*- coding: UTF-8 -*-
+
 from django.shortcuts import HttpResponse, redirect, render
+from collections import OrderedDict
+from django.conf import settings
+from django.utils.module_loading import import_string
+
 # from django.urls import reverse
+from rbac import models
 from rbac.forms.Menu import MenuModelForms
 from rbac.forms.Menu import SecondMenuModelForms
 from rbac.forms.Menu import PermissionModelForms
 from rbac.services.Menu_urls import memory_resverse
-from rbac import models
+
+
 
 
 def menu_list(request):
@@ -235,7 +242,6 @@ def permission_edit(request, pk):
     return render(request, 'rbac/change.html', {'form': form})
 
 
-
 def permission_del(request, pk):
    '''
     删除权限
@@ -250,3 +256,28 @@ def permission_del(request, pk):
 
    models.Permission.objects.filter(id=pk).delete()
    return redirect(url)
+
+
+def  get_all_url_dic():
+    '''
+    获取项目中所有的URL
+    :return:
+    '''
+    url_ordered_dict = OrderedDict()
+    md = import_string(settings.ROOT_URLCONF)  # from luff .. import urls
+
+  for item in md.urlpatterns:
+        print(item)
+
+
+
+
+def multi_permission(request,):
+    '''
+    批量操作权限
+    :param request:
+   :param second_menu_id:
+    :return:
+    '''
+    get_all_url_dic()
+    return  HttpResponse('ok')
