@@ -191,3 +191,8 @@ VALID_URL_LIST = [
 ]
 
 MENU_SISSION_KEY = 'luffy_permission_menu_key'
+#############################################################
+AUTO_DEISCOVER_EXCLUDE = [
+    '/admin/',
+    '/login/'
+]

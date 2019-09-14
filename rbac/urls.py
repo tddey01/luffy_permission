@@ -39,7 +39,4 @@ urlpatterns = [
     #
     url(r'^multi/permission/$', menu.multi_permission, name='multi_permission'),  # rbac:v_add
 
-
-
-
 ]

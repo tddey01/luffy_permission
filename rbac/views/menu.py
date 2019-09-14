@@ -2,9 +2,6 @@
 # -*- coding: UTF-8 -*-
 
 from django.shortcuts import HttpResponse, redirect, render
-from collections import OrderedDict
-from django.conf import settings
-from django.utils.module_loading import import_string
 
 # from django.urls import reverse
 from rbac import models
@@ -12,8 +9,7 @@ from rbac.forms.Menu import MenuModelForms
 from rbac.forms.Menu import SecondMenuModelForms
 from rbac.forms.Menu import PermissionModelForms
 from rbac.services.Menu_urls import memory_resverse
-
-
+from rbac.services.routes import  get_all_url_dict
 
 
 def menu_list(request):
@@ -243,59 +239,32 @@ def permission_edit(request, pk):
 
 
 def permission_del(request, pk):
-   '''
-    删除权限
-   :param request:
-   :param pk:
-   :return:
-   '''
-
-   url = memory_resverse(request, 'rbac:menu_list')
-   if request.method == 'GET':
-       return render(request, 'rbac/delete.html', {'cancel_url': url})
-
-   models.Permission.objects.filter(id=pk).delete()
-   return redirect(url)
-
-def recursion_urls(pre_namespace,pre_url,urlpatterns,url_ordered_dict):
     '''
-    递归的获取URL
-    :param pre_namespace:   namespace 前缀 以后用于拼接前缀 name
-    :param pre_url:     url 前缀  以后用于拼接 url
-    :param urlpatterns:   路由关系列表
-    :param url_ordered_dict:  用于保存递归中获取的所有路由
+     删除权限
+    :param request:
+    :param pk:
     :return:
     '''
 
+    url = memory_resverse(request, 'rbac:menu_list')
+    if request.method == 'GET':
+        return render(request, 'rbac/delete.html', {'cancel_url': url})
 
-def  get_all_url_dic():
-    '''
-    获取项目中所有的URL
-    :return:
-    '''
-    url_ordered_dict = OrderedDict()
-    '''
-    {
-        'rbac:menu_list':{
-        name:'rbac:menu_list'
-        url;'xxx/xxx/menu/list',
-        }
-    }
-    '''
-    md = import_string(settings.ROOT_URLCONF)  # from luff .. import urls
-
-    # for item in md.urlpatterns:
-    #     print(item)
-    recursion_urls(None , '/', md.urlpatterns, url_ordered_dict)
+    models.Permission.objects.filter(id=pk).delete()
+    return redirect(url)
 
 
-
-def multi_permission(request,):
+def multi_permission(request, ):
     '''
     批量操作权限
     :param request:
    :param second_menu_id:
     :return:
     '''
-    get_all_url_dic()
-    return  HttpResponse('ok')
+    all_url_dict = get_all_url_dict()
+
+    for k, v in all_url_dict.items():
+        print(k, v)
+
+    # print(all_url_dict)
+    return HttpResponse('ok')
