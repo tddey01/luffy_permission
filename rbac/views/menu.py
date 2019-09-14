@@ -10,6 +10,7 @@ from rbac.forms.Menu import SecondMenuModelForms
 from rbac.forms.Menu import PermissionModelForms
 from rbac.services.Menu_urls import memory_resverse
 from rbac.services.routes import  get_all_url_dict
+from collections import OrderedDict
 
 
 def menu_list(request):
@@ -262,9 +263,25 @@ def multi_permission(request, ):
     :return:
     '''
     all_url_dict = get_all_url_dict()
+    '''
+    {
+       'rbac:role_list':{'name': 'rbac:role_list', 'url': '/rbac/role/list/'},
+      'rbac:role_add':{'name': 'rbac:role_list', 'url': '/rbac/role/add/'}     
 
-    for k, v in all_url_dict.items():
-        print(k, v)
+    }
+    '''
+    router_name_set = set(all_url_dict)
+
+    # 获取数据库中所有的URL
+
+    permission = models.Permission.objects.all().values('id','title','name','url','menu_id','pid_id')
+    permission_dict = OrderedDict()
+
+    for row in permission:
+        permission_dict[row['name']] = row
+    '''
+        
+    '''
 
     # print(all_url_dict)
     return HttpResponse('ok')
