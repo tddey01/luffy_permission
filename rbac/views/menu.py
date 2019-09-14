@@ -257,6 +257,16 @@ def permission_del(request, pk):
    models.Permission.objects.filter(id=pk).delete()
    return redirect(url)
 
+def recursion_urls(pre_namespace,pre_url,urlpatterns,url_ordered_dict):
+    '''
+    递归的获取URL
+    :param pre_namespace:   namespace 前缀 以后用于拼接前缀 name
+    :param pre_url:     url 前缀  以后用于拼接 url
+    :param urlpatterns:   路由关系列表
+    :param url_ordered_dict:  用于保存递归中获取的所有路由
+    :return:
+    '''
+
 
 def  get_all_url_dic():
     '''
@@ -264,11 +274,19 @@ def  get_all_url_dic():
     :return:
     '''
     url_ordered_dict = OrderedDict()
+    '''
+    {
+        'rbac:menu_list':{
+        name:'rbac:menu_list'
+        url;'xxx/xxx/menu/list',
+        }
+    }
+    '''
     md = import_string(settings.ROOT_URLCONF)  # from luff .. import urls
 
-  for item in md.urlpatterns:
-        print(item)
-
+    # for item in md.urlpatterns:
+    #     print(item)
+    recursion_urls(None , '/', md.urlpatterns, url_ordered_dict)
 
 
 
