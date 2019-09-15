@@ -283,6 +283,7 @@ def multi_permissions(request):
 
     # 2. 获取数据库中所有的URL
     permissions = models.Permission.objects.all().values('id', 'title', 'name', 'url', 'menu_id', 'pid_id')
+    print(permissions)
     permission_dict = OrderedDict()
     permission_name_set = set()
     for row in permissions:

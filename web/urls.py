@@ -3,6 +3,7 @@ from web.views import customer
 from web.views import payment
 from web.views import account
 
+app_name = 'web'
 urlpatterns = [
 
     url(r'^customer/list/$', customer.customer_list, name='customer_list', ),

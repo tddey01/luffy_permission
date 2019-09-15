@@ -41,7 +41,7 @@ def recursion_urls(pre_namespace, pre_url, urlpatterns, url_ordered_dict):
                 name = item.name
 
             # url = pre_url + str(item.pattern)  #
-            url = pre_url + item.pattern
+            url = pre_url + str(item.pattern)
             url = url.replace('^', '').replace('$', '')
             if check_url_exclude(url):  # 判断是否admin、login等我们不需要的url，是的话直接跳过
                 continue
@@ -61,26 +61,17 @@ def recursion_urls(pre_namespace, pre_url, urlpatterns, url_ordered_dict):
                 else:
                     namespace = None
 
-            recursion_urls(pre_namespace, pre_url + str(item.pattern), item.url_patterns, url_ordered_dict)
+            recursion_urls(namespace, pre_url + str(item.pattern), item.url_patterns, url_ordered_dict)
 
 
 def get_all_url_dict():
-    '''
+    """
     获取项目中所有的URL（必须有name别名）
     :return:
-    '''
+    """
     url_ordered_dict = OrderedDict()
-    '''
-    {
-        'rbac:menu_list':{
-        name:'rbac:menu_list'
-        url;'xxx/xxx/menu/list',
-        }
-    }
-    '''
-    md = import_string(settings.ROOT_URLCONF)  # from luff .. import urls
 
-    # for item in md.urlpatterns:
-    #     print(item)
-    recursion_urls(None, '/', md.urlpatterns, url_ordered_dict)
+    md = import_string(settings.ROOT_URLCONF)  # from luff.. import urls
+    recursion_urls(None, '/', md.urlpatterns, url_ordered_dict)  # 递归去获取所有的路由
+
     return url_ordered_dict
