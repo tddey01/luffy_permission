@@ -284,7 +284,7 @@ def multi_permissions(request):
             # print(formset.cleaned_data)
             post_row_list = formset.cleaned_data
             has_error = False
-            for i in range(0,formset.total_form_count()):
+            for i in range(0, formset.total_form_count()):
                 row_dict = post_row_list[i]
 
                 try:
@@ -298,7 +298,7 @@ def multi_permissions(request):
                     has_error = True
 
             if not has_error:
-                models.Permission.objects.bulk_create(object_list,batch_size=100)  # 批量增加
+                models.Permission.objects.bulk_create(object_list, batch_size=100)  # 批量增加
 
 
         else:
@@ -309,14 +309,14 @@ def multi_permissions(request):
         formset = update_formset_class(data=request.POST)
         if formset.is_valid():
             post_row_list = formset.cleaned_data
-            for i in range(0,formset.total_form_count()):
+            for i in range(0, formset.total_form_count()):
                 row_dict = post_row_list[i]
                 permission_id = row_dict.pop('id')
 
                 try:
-                    row_object = models.Permission.objects.filter(id = permission_id).first()
-                    for k,v in row_dict.items():
-                        setattr(row_object,k,v)
+                    row_object = models.Permission.objects.filter(id=permission_id).first()
+                    for k, v in row_dict.items():
+                        setattr(row_object, k, v)
                     row_object.validate_unique()
                     row_object.save()
                 except Exception as e:
@@ -324,7 +324,6 @@ def multi_permissions(request):
                     update_formset = formset
         else:
             update_formset = formset
-
 
     # 1. 获取项目中所有的URL
     all_url_dict = get_all_url_dict()
@@ -348,7 +347,6 @@ def multi_permissions(request):
         permission_dict[row['name']] = row
 
         permission_name_set.add(row['name'])
-
 
     """
     {
@@ -389,14 +387,14 @@ def multi_permissions(request):
         'rbac/multi_permsissions.html',
         {
             'generate_formset': generate_formset,
-            'delete_row_list':delete_row_list,
-            'update_formset':update_formset,
+            'delete_row_list': delete_row_list,
+            'update_formset': update_formset,
 
         }
     )
 
 
-def multi_permissions_del(request,pk):
+def multi_permissions_del(request, pk):
     '''
      批量删除
     :param request:
@@ -409,3 +407,54 @@ def multi_permissions_del(request,pk):
 
     models.Permission.objects.filter(id=pk).delete()
     return redirect(url)
+
+
+def distribute_permissions(request):
+    '''
+    权限分配
+    :param request:
+    :return:
+    '''
+    all_user_list = models.UserInfo.objects.all()
+    all_role_list = models.Role.objects.all()
+
+    menu_permsissions_list = []
+
+    # 所有菜单（一级菜单）
+    all_menu_list = models.Menu.objects.values('id','title')
+
+    # 所有二级菜单
+    all_second_menu_list = models.Permission.objects.filter(menu__isnull=False).values('id','title','menu_id')
+
+
+
+    '''
+    [
+        {
+         id，：2
+        'title':业务管理
+         children:[
+                {  
+                  'id':11,
+                  'title':'账单列表',
+                  childram:[
+                  {
+                   'id':12,
+                    'title':'添加账单',
+                        },]
+                    },
+                 {'id':11,'title':'客户列表',},
+            ]
+        }
+    ]
+    '''
+
+    return render(
+        request,
+        'rbac/distribute_permissions.html',
+        {
+            'user_list': all_user_list,
+            'role_list': all_role_list,
+
+        }
+    )
