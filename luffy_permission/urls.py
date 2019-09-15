@@ -19,7 +19,7 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^rbac/', include('rbac.urls', namespace='rbac')),  # rbac:xxRegexURLResolv
-    url(r'^', include('web.urls',namespace='web')),
+    url(r'^', include('web.urls',)),
     # url(r'^/xx/xx',lambda  x:x), # RegexURLResolver
 
 ]

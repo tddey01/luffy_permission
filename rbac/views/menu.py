@@ -283,12 +283,15 @@ def multi_permissions(request):
 
     # 2. 获取数据库中所有的URL
     permissions = models.Permission.objects.all().values('id', 'title', 'name', 'url', 'menu_id', 'pid_id')
-    print(permissions)
+    # print(permissions)
     permission_dict = OrderedDict()
     permission_name_set = set()
     for row in permissions:
         permission_dict[row['name']] = row
+
         permission_name_set.add(row['name'])
+
+
     """
     {
         'rbac:role_list': {'id':1,'title':'角色列表',name:'rbac:role_list',url.....},
@@ -299,6 +302,7 @@ def multi_permissions(request):
 
     for name, value in permission_dict.items():
         router_row_dict = all_url_dict.get(name)  # {'name': 'rbac:role_list', 'url': '/rbac/role/list/'},
+
         if not router_row_dict:
             continue
         if value['url'] != router_row_dict['url']:
@@ -326,5 +330,8 @@ def multi_permissions(request):
         'rbac/multi_permsissions.html',
         {
             'generate_formset': generate_formset,
+            'delete_row_list':delete_row_list,
+            'update_formset':update_formset,
+
         }
     )
