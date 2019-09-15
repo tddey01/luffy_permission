@@ -33,7 +33,7 @@ def recursion_urls(pre_namespace, pre_url, urlpatterns, url_ordered_dict):
             if not item.name:
                 continue
 
-            name = item.name
+            # name = item.name
             if pre_namespace:
                 name = '%s:%s' % (pre_namespace, item.name)
 
@@ -41,7 +41,7 @@ def recursion_urls(pre_namespace, pre_url, urlpatterns, url_ordered_dict):
                 name = item.name
 
             # url = pre_url + str(item.pattern)  #
-            url = pre_url + str(item.pattern)
+            url = pre_url + item.pattern
             url = url.replace('^', '').replace('$', '')
             if check_url_exclude(url):  # 判断是否admin、login等我们不需要的url，是的话直接跳过
                 continue

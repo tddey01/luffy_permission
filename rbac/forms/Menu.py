@@ -4,7 +4,7 @@ from django import forms
 
 from django.utils.safestring import mark_safe
 from rbac import models
-from rbac.forms.base import  BootStrapModelForm
+from rbac.forms.base import BootStrapModelForm
 
 ICON_LIST = [
     ['fa-hand-scissors-o', '<i aria-hidden="true" class="fa fa-hand-scissors-o"></i>'],
@@ -64,9 +64,71 @@ class SecondMenuModelForms(BootStrapModelForm):
         exclude = ['pid']
 
 
-
 class PermissionModelForms(BootStrapModelForm):
     class Meta:
         model = models.Permission
-        fields = ['title','name','url']
+        fields = ['title', 'name', 'url']
 
+
+class MultiAddPermissionForm(forms.Form):
+    title = forms.CharField(
+        widget=forms.TextInput(attrs={'class': "form-control"})
+    )
+    url = forms.CharField(
+        widget=forms.TextInput(attrs={'class': "form-control"})
+    )
+    name = forms.CharField(
+        widget=forms.TextInput(attrs={'class': "form-control"})
+    )
+    menu_id = forms.ChoiceField(
+        choices=[(None, '-----')],
+        widget=forms.Select(attrs={'class': "form-control"}),
+        required=False,
+
+    )
+
+    pid_id = forms.ChoiceField(
+        choices=[(None, '-----')],
+        widget=forms.Select(attrs={'class': "form-control"}),
+        required=False,
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['menu_id'].choices += models.Menu.objects.values_list('id', 'title')
+        self.fields['pid_id'].choices += models.Permission.objects.filter(pid__isnull=True).exclude(
+            menu__isnull=True).values_list('id', 'title')
+
+
+class MultiEditPermissionForm(forms.Form):
+    id = forms.IntegerField(
+        widget=forms.HiddenInput()
+    )
+
+    title = forms.CharField(
+        widget=forms.TextInput(attrs={'class': "form-control"})
+    )
+    url = forms.CharField(
+        widget=forms.TextInput(attrs={'class': "form-control"})
+    )
+    name = forms.CharField(
+        widget=forms.TextInput(attrs={'class': "form-control"})
+    )
+    menu_id = forms.ChoiceField(
+        choices=[(None, '-----')],
+        widget=forms.Select(attrs={'class': "form-control"}),
+        required=False,
+
+    )
+
+    pid_id = forms.ChoiceField(
+        choices=[(None, '-----')],
+        widget=forms.Select(attrs={'class': "form-control"}),
+        required=False,
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['menu_id'].choices += models.Menu.objects.values_list('id', 'title')
+        self.fields['pid_id'].choices += models.Permission.objects.filter(pid__isnull=True).exclude(
+            menu__isnull=True).values_list('id', 'title')
