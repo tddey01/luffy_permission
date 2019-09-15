@@ -34,7 +34,8 @@ urlpatterns = [
     url(r'^permission/edit/(?P<pk>\d+)/$', menu.permission_edit, name='permission_edit'),  # rbac:permission_edit
     url(r'^permission/del/(?P<pk>\d+)/$', menu.permission_del, name='permission_del'),  # rbac:permission_del
 
-    #
-    url(r'^multi/permissions/$', menu.multi_permissions, name='multi_permissions'),  # rbac:v_add
+    # 批量操作
+    url(r'^multi/permissions/$', menu.multi_permissions, name='multi_permissions'),  # rbac:multi_permissions
+    url(r'^multi/permissions/del/(?P<pk>\d+)/$', menu.multi_permissions_del, name='multi_permissions_del'),  # rbac:multi_permissions_del
 
 ]

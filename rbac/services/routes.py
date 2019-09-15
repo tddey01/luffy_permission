@@ -73,5 +73,5 @@ def get_all_url_dict():
 
     md = import_string(settings.ROOT_URLCONF)  # from luff.. import urls
     recursion_urls(None, '/', md.urlpatterns, url_ordered_dict)  # 递归去获取所有的路由
-    print(recursion_urls)
+
     return url_ordered_dict
