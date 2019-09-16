@@ -422,11 +422,38 @@ def distribute_permissions(request):
 
     # 所有菜单（一级菜单）
     all_menu_list = models.Menu.objects.values('id','title')
+    """
+    [
+        {'id:1,title:菜单1,},
+        {'id:2,title:菜单2,},
+        {'id:3,title:菜单3,},
+    ]
+    """
+
 
     # 所有二级菜单
     all_second_menu_list = models.Permission.objects.filter(menu__isnull=False).values('id','title','menu_id')
+    """
+    [
+      {id:1,title:x1, menu_id:1,},
+      {id:1,title:x1, menu_id:1,},
+      {id:1,title:x1, menu_id:2,},
+      {id:1,title:x1, menu_id:3,},
+      {id:1,title:x1, menu_id:3,}, 
+    ]
+    """
 
-
+    # 所有三级菜单
+    all_permission_list = models.Permission.objects.filter(menu__isnull=False).values('id', 'title', 'pid_id')
+    """
+    [
+      {id:11,title:x1, pid_id:1,},
+      {id:12,title:x1, pid_id:2,},
+      {id:13,title:x1, pid_id:3,},
+      {id:14,title:x1, pid_id:4,},
+      {id:15,title:x1, pid_id:5,}, 
+    ]
+    """
 
     '''
     [
