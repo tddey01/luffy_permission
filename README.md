@@ -54,6 +54,13 @@ c. 模板中显示菜单信息,(session)
 
 ​    --- 二级菜单
 
+```angular2
+pip freeze > requirements.txt 环境安装导出模块
+项项目环境  安装
+pip install -r requirements.txt
+
+  
+```
 
 
 
