@@ -1,15 +1,8 @@
 {% extends 'layout.html' %}
 {% load rbac %}
-
-
-
-
-
 {% block content %}
     <div class="luffy-container">
-
-        <div class="col-md-1 user-area">
-
+        <div class="col-md-3 user-area">
             <div class="panel panel-default">
                 <!-- Default panel contents -->
                 <div class="panel-heading">
@@ -24,12 +17,9 @@
                         {% endfor %}
                     </ul>
                 </div>
-
             </div>
-
         </div>
-
-        <div class="col-md-2 role-area">
+        <div class="col-md-3 role-area">
             <form method="post">
                 {% csrf_token %}
                 <input type="hidden" name="type" value="role">
@@ -73,13 +63,11 @@
                                 </td>
                             </tr>
                         {% endfor %}
-
                         </tbody>
                     </table>
                 </div>
             </form>
         </div>
-
         <div class="col-md-6 permission-area">
             <form method="post">
                 {% csrf_token %}
@@ -124,17 +112,14 @@
                                                 <input id="permission_{{ node.id }}" name="permissions"
                                                        {% if node.id in user_has_permissions_dict %}checked{% endif %}
                                                        value="{{ node.id }}" type="checkbox">
-
                                                 <label for="permission_{{ node.id }}">{{ node.title }}（菜单）</label>
                                             </div>
                                             <div class="children">
                                                 {% for child in node.children %}
                                                     <div class="child">
-
                                                         <input id="permission_{{ child.id }}" name="permissions"
                                                                {% if child.id in user_has_permissions_dict %}checked{% endif %}
                                                                type="checkbox" value="{{ child.id }}">
-
                                                         <label for="permission_{{ child.id }}">{{ child.title }}</label>
                                                     </div>
                                                 {% endfor %}
@@ -146,15 +131,11 @@
                         {% endfor %}
                         </tbody>
                     </table>
-
-
                 </div>
             </form>
         </div>
     </div>
 {% endblock %}
-
-
 {% block js %}
     <script type="text/javascript">
         $(function () {
@@ -162,6 +143,5 @@
                 $(this).parents('.root').next().find(':checkbox').prop('checked',$(this).prop('checked'));
             })
         })
-
     </script>
 {% endblock %}
