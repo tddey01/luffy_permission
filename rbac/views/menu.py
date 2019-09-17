@@ -366,6 +366,7 @@ def multi_permissions(request):
 
     # 3. 应该添加、删除、修改的权限有哪些？
     # 3.1 计算出应该增加的name
+
     if not generate_formset:
         generate_name_list = router_name_set - permission_name_set
         generate_formset = generate_formset_class(
@@ -445,6 +446,7 @@ def distribute_permissions(request):
 
         # 如果选中的角色，优先显示选中角色所拥有的权限
         # 如果没有选择角色，才显示用户所拥有的权限
+
     if role_object:  # 选择了角色
         user_has_permissions = role_object.permissions.all()
         user_has_permissions_dict = {item.id: None for item in user_has_permissions}
@@ -458,6 +460,7 @@ def distribute_permissions(request):
 
 
     # 获取当前用户拥有的所有角色
+
     if user_id:
         user_has_roles = user_object.roles.all()
     else:
@@ -474,8 +477,11 @@ def distribute_permissions(request):
     '''
     <QuerySet [{'id': 1, 'title': '信息管理', 'children': [{'id': 1, 'title': '客户列表', 'menu_id': 1, 'children': []}, {'id': 7, 'title': '账单列表', 'menu_id': 1, 'children': []}]}, {'id': 10, 'title': '信息中心', 'children': [{'id': 19, 'title': '系统', 'menu_id': 10, 'children': []}]}, {'id': 11, 'title': '权限管理', 'children': [{'id': 21, 'title': '角色列表', 'menu_id': 11, 'children': []}, {'id': 25, 'title': '用户列表', 'menu_id': 11, 'children': []}, {'id': 30, 'title': '菜单列表', 'menu_id': 11, 'children': []}]}]>
     '''
+
     # 所有菜单（一级菜单）
+
     all_menu_list = models.Menu.objects.values('id','title')
+
     """
     [
         {'id:1,title:菜单1,'children':[{id:1,title:x1, menu_id:1,},{id:1,title:x1, menu_id:1,}]},
@@ -483,7 +489,9 @@ def distribute_permissions(request):
         {'id:3,title:菜单3,'children':[{id:2,title:x2, menu_id:3,} ,]},
     ]
     """
+
     all_menu_dict = {}
+
     """
     [
         {'id:1,title:菜单1,'children':[{id:1,title:x1, menu_id:1,children':[{id:1,title:x2,pid:1}]},{id:1,title:x1, menu_id:1,}]},
@@ -491,6 +499,7 @@ def distribute_permissions(request):
         {'id:3,title:菜单3,'children':[{id:2,title:x2, menu_id:3,children':[] },]},
     ]
     """
+
     for item in all_menu_list:
         item['children'] = []
         all_menu_dict[item['id']] = item
@@ -499,6 +508,7 @@ def distribute_permissions(request):
 
 
     # 所有二级菜单
+
     all_second_menu_list = models.Permission.objects.filter(menu__isnull=False).values('id','title','menu_id')
 
     """
@@ -510,6 +520,7 @@ def distribute_permissions(request):
       {id:1,title:x1, menu_id:3,children:[]}, 
     ]
     """
+
     all_second_menu_dict = {}
     """
     [
