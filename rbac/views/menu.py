@@ -415,36 +415,122 @@ def distribute_permissions(request):
     :param request:
     :return:
     '''
+
+    user_id = request.GET.get('uid')
+    user_object = models.UserInfo.objects.filter(id=user_id).first()
+
+    if not user_object:
+        user_id = None
+
+    role_id = request.GET.get('rid')
+    role_object = models.Role.objects.filter(id=role_id).first()
+    if not role_object:
+        role_id = None
+
+
+    if request.method == 'POST' and request.POST.get('type') == 'role':
+        role_id_list = request.POST.getlist('roles')
+        # 用户和角色关系添加到第三张表（关系表）
+        if not user_object:
+            return HttpResponse('请选择用户，然后再分配角色！')
+        user_object.roles.set(role_id_list)
+
+    if request.method == 'POST' and request.POST.get('type') == 'permission':
+        permission_id_list = request.POST.getlist('permissions')
+        if not role_object:
+            return HttpResponse('请选择角色，然后再分配权限！')
+        role_object.permissions.set(permission_id_list)
+
+        # 获取当前用户用户用户的所有权限
+
+        # 如果选中的角色，优先显示选中角色所拥有的权限
+        # 如果没有选择角色，才显示用户所拥有的权限
+    if role_object:  # 选择了角色
+        user_has_permissions = role_object.permissions.all()
+        user_has_permissions_dict = {item.id: None for item in user_has_permissions}
+
+    elif user_object:  # 未选择角色，但选择了用户
+        user_has_permissions = user_object.roles.filter(permissions__id__isnull=False).values('id',
+                                                                                                  'permissions').distinct()
+        user_has_permissions_dict = {item['permissions']: None for item in user_has_permissions}
+    else:
+        user_has_permissions_dict = {}
+
+
+    # 获取当前用户拥有的所有角色
+    if user_id:
+        user_has_roles = user_object.roles.all()
+    else:
+        user_has_roles = []
+
+    user_has_roles_dict = {item.id: None for item in user_has_roles}
+
+
     all_user_list = models.UserInfo.objects.all()
     all_role_list = models.Role.objects.all()
 
     menu_permsissions_list = []
 
+    '''
+    <QuerySet [{'id': 1, 'title': '信息管理', 'children': [{'id': 1, 'title': '客户列表', 'menu_id': 1, 'children': []}, {'id': 7, 'title': '账单列表', 'menu_id': 1, 'children': []}]}, {'id': 10, 'title': '信息中心', 'children': [{'id': 19, 'title': '系统', 'menu_id': 10, 'children': []}]}, {'id': 11, 'title': '权限管理', 'children': [{'id': 21, 'title': '角色列表', 'menu_id': 11, 'children': []}, {'id': 25, 'title': '用户列表', 'menu_id': 11, 'children': []}, {'id': 30, 'title': '菜单列表', 'menu_id': 11, 'children': []}]}]>
+    '''
     # 所有菜单（一级菜单）
     all_menu_list = models.Menu.objects.values('id','title')
     """
     [
-        {'id:1,title:菜单1,},
-        {'id:2,title:菜单2,},
-        {'id:3,title:菜单3,},
+        {'id:1,title:菜单1,'children':[{id:1,title:x1, menu_id:1,},{id:1,title:x1, menu_id:1,}]},
+        {'id:2,title:菜单2,'children':[{id:2,title:x2, menu_id:2,},{id:2,title:x2, menu_id:2,}]},
+        {'id:3,title:菜单3,'children':[{id:2,title:x2, menu_id:3,} ,]},
     ]
     """
+    all_menu_dict = {}
+    """
+    [
+        {'id:1,title:菜单1,'children':[{id:1,title:x1, menu_id:1,children':[{id:1,title:x2,pid:1}]},{id:1,title:x1, menu_id:1,}]},
+        {'id:2,title:菜单2,'children':[{id:2,title:x2, menu_id:2,children':[]},{id:5,title:x1, menu_id:2,children':[]},]},
+        {'id:3,title:菜单3,'children':[{id:2,title:x2, menu_id:3,children':[] },]},
+    ]
+    """
+    for item in all_menu_list:
+        item['children'] = []
+        all_menu_dict[item['id']] = item
+
+
 
 
     # 所有二级菜单
     all_second_menu_list = models.Permission.objects.filter(menu__isnull=False).values('id','title','menu_id')
+
     """
     [
-      {id:1,title:x1, menu_id:1,},
-      {id:1,title:x1, menu_id:1,},
-      {id:1,title:x1, menu_id:2,},
-      {id:1,title:x1, menu_id:3,},
-      {id:1,title:x1, menu_id:3,}, 
+      {id:1,title:x1, menu_id:1,children:[{id:1,title:x2,pid:1},]},
+      {id:1,title:x1, menu_id:1,children:[]},
+      {id:1,title:x1, menu_id:2,children:[]},
+      {id:1,title:x1, menu_id:3,children:[]},
+      {id:1,title:x1, menu_id:3,children:[]}, 
     ]
     """
+    all_second_menu_dict = {}
+    """
+    [
+      1:{id:1,title:x1, menu_id:1,children:[]},
+      2:{id:1,title:x1, menu_id:1,children:[]},
+      3:{id:1,title:x1, menu_id:2,children:[]},
+      4:{id:1,title:x1, menu_id:3,children:[]},
+      5:{id:1,title:x1, menu_id:3,children:[]}, 
+    ]
+    """
+    for row in all_second_menu_list:
+        row['children'] = []
+        all_second_menu_dict[row['id']] = row
+
+        menu_id = row['menu_id']
+        all_menu_dict[menu_id]['children'].append(row)
+
+
 
     # 所有三级菜单
-    all_permission_list = models.Permission.objects.filter(menu__isnull=False).values('id', 'title', 'pid_id')
+    all_permission_list = models.Permission.objects.filter(menu__isnull=True).values('id', 'title', 'pid_id')
     """
     [
       {id:11,title:x1, pid_id:1,},
@@ -454,6 +540,12 @@ def distribute_permissions(request):
       {id:15,title:x1, pid_id:5,}, 
     ]
     """
+    for row in all_permission_list:
+        pid = row['pid_id']
+        if not pid:
+            continue
+        all_second_menu_dict[pid]['children'].append(row)
+
 
     '''
     [
@@ -475,6 +567,7 @@ def distribute_permissions(request):
         }
     ]
     '''
+    # print(all_menu_list)
 
     return render(
         request,
@@ -482,6 +575,11 @@ def distribute_permissions(request):
         {
             'user_list': all_user_list,
             'role_list': all_role_list,
+            'all_menu_list':all_menu_list,
+            'user_id':user_id,
+            'role_id':role_id,
+            'user_has_roles_dict':user_has_roles_dict,
+            'user_has_permissions_dict':user_has_permissions_dict,
 
         }
     )

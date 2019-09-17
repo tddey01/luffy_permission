@@ -1,0 +1,191 @@
+[
+    {
+        "id": 1, 
+        "title": "信息管理", 
+        "children": [
+            {
+                "id": 1, 
+                "title": "客户列表", 
+                "menu_id": 1, 
+                "children": [
+                    {
+                        "id": 2, 
+                        "title": "添加客户", 
+                        "pid_id": 1
+                    }, 
+                    {
+                        "id": 3, 
+                        "title": "删除客户", 
+                        "pid_id": 1
+                    }, 
+                    {
+                        "id": 4, 
+                        "title": "修改客户", 
+                        "pid_id": 1
+                    }, 
+                    {
+                        "id": 5, 
+                        "title": "批量导入", 
+                        "pid_id": 1
+                    }, 
+                    {
+                        "id": 6, 
+                        "title": "下载模板", 
+                        "pid_id": 1
+                    }
+                ]
+            }, 
+            {
+                "id": 7, 
+                "title": "账单列表", 
+                "menu_id": 1, 
+                "children": [
+                    {
+                        "id": 8, 
+                        "title": "添加账单", 
+                        "pid_id": 7
+                    }, 
+                    {
+                        "id": 9, 
+                        "title": "删除账单", 
+                        "pid_id": 7
+                    }, 
+                    {
+                        "id": 10, 
+                        "title": "修改账单", 
+                        "pid_id": 7
+                    }
+                ]
+            }
+        ]
+    }, 
+    {
+        "id": 10, 
+        "title": "信息中心", 
+        "children": [
+            {
+                "id": 19, 
+                "title": "系统", 
+                "menu_id": 10, 
+                "children": [ ]
+            }
+        ]
+    }, 
+    {
+        "id": 11, 
+        "title": "权限管理", 
+        "children": [
+            {
+                "id": 21, 
+                "title": "角色列表", 
+                "menu_id": 11, 
+                "children": [
+                    {
+                        "id": 22, 
+                        "title": "添加角色", 
+                        "pid_id": 21
+                    }, 
+                    {
+                        "id": 23, 
+                        "title": "删除角色", 
+                        "pid_id": 21
+                    }, 
+                    {
+                        "id": 24, 
+                        "title": "编辑角色", 
+                        "pid_id": 21
+                    }
+                ]
+            }, 
+            {
+                "id": 25, 
+                "title": "用户列表", 
+                "menu_id": 11, 
+                "children": [
+                    {
+                        "id": 26, 
+                        "title": "添加用户", 
+                        "pid_id": 25
+                    }, 
+                    {
+                        "id": 27, 
+                        "title": "删除用户", 
+                        "pid_id": 25
+                    }, 
+                    {
+                        "id": 28, 
+                        "title": "重置用户密码", 
+                        "pid_id": 25
+                    }, 
+                    {
+                        "id": 29, 
+                        "title": "编辑用户", 
+                        "pid_id": 25
+                    }
+                ]
+            }, 
+            {
+                "id": 30, 
+                "title": "菜单列表", 
+                "menu_id": 11, 
+                "children": [
+                    {
+                        "id": 31, 
+                        "title": "添加菜单", 
+                        "pid_id": 30
+                    }, 
+                    {
+                        "id": 32, 
+                        "title": "编辑菜单", 
+                        "pid_id": 30
+                    }, 
+                    {
+                        "id": 33, 
+                        "title": "删除菜单", 
+                        "pid_id": 30
+                    }, 
+                    {
+                        "id": 34, 
+                        "title": "添加二级菜单", 
+                        "pid_id": 30
+                    }, 
+                    {
+                        "id": 35, 
+                        "title": "编辑二级菜单", 
+                        "pid_id": 30
+                    }, 
+                    {
+                        "id": 36, 
+                        "title": "删除二级菜单", 
+                        "pid_id": 30
+                    }, 
+                    {
+                        "id": 37, 
+                        "title": "添加权限", 
+                        "pid_id": 30
+                    }, 
+                    {
+                        "id": 38, 
+                        "title": "编辑权限", 
+                        "pid_id": 30
+                    }, 
+                    {
+                        "id": 39, 
+                        "title": "删除权限", 
+                        "pid_id": 30
+                    }, 
+                    {
+                        "id": 40, 
+                        "title": "批量操作权限", 
+                        "pid_id": 30
+                    }, 
+                    {
+                        "id": 41, 
+                        "title": "批量删除", 
+                        "pid_id": 30
+                    }
+                ]
+            }
+        ]
+    }
+]
