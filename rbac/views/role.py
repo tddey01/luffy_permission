@@ -10,11 +10,11 @@ from rbac.forms.Role import RoleModelForm
 
 
 def role_list(request):
-    '''
+    """
     角色列表
-    :param requst:
+    :param request:
     :return:
-    '''
+    """
     role_queryset = models.Role.objects.all()
 
     return render(request, 'rbac/role_list.html', {'roles': role_queryset})

@@ -6,10 +6,10 @@ import re
 from django.template import Library
 from django.conf import settings
 from collections import OrderedDict
-# from django.urls import reverse
-# from django.http import QueryDict
-from rbac.services import Menu_urls
+from django.http import QueryDict
+from django.urls import reverse
 
+from rbac.services import  Menu_urls
 register = Library()
 
 
